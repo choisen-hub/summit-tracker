@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Summit Tracker
 
-## Getting Started
+전 세계 국가정상 간의 만남(정상회담·다자회의·전화통화 등)을 DB화하여
+**시각화 · 빈도분석 · 어젠다/공동성명 정리**를 제공하는 외교 인텔리전스 대시보드.
 
-First, run the development server:
+- 설계 문서: [`docs/DESIGN.md`](docs/DESIGN.md) · [시각 도시에(HTML)](docs/design.html)
+- 스코프: 글로벌 전체 · 데이터: 하이브리드(공개셋 시드 + 뉴스·LLM 갱신) · 백필: G20 우선 · 추출: 일 1회
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 스택
+Next.js 15 (App Router · TS) · Tailwind v3 · Supabase (Postgres) · Claude(추출) · Vercel
+
+> Node 18 환경이라 Tailwind는 v3, Next는 15로 고정했습니다. Node 20+로 올리면 v4/Next 16 가능.
+
+## 구조
+```
+src/app/            # Next.js 라우트 (현재 Phase 0 상태 페이지)
+src/lib/            # supabase 클라이언트, dedup, entity-linking
+src/data/           # countries 시드 (G20 우선)
+supabase/migrations # 0001_init.sql (8 테이블) · 0002_views.sql (3 뷰)
+scripts/            # seed-countries(P0) · seed-wikidata/wikipedia(P1) · extract-news(P3)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 셋업 (Phase 0 → 실데이터)
+```bash
+npm install
+cp .env.example .env.local          # Supabase 신규 프로젝트 키 입력
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 스키마를 호스티드 프로젝트에 반영
+npx supabase login
+npx supabase link --project-ref <YOUR_REF>
+npm run db:push
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 국가 시드
+npm run seed:countries
 
-## Learn More
+npm run dev                          # http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 로드맵
+Phase 0 기반 ✅ → 1 과거시드(G20) → 2 시각화 MVP(데모) → 3 라이브 파이프라인 → 4 어젠다/성명 → 5 마감.
+자세한 단계는 `docs/DESIGN.md §7`.

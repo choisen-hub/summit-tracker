@@ -6,22 +6,38 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:reset": "supabase db reset",
+    "db:push": "supabase db push",
+    "seed:countries": "tsx scripts/seed-countries.ts",
+    "seed:wikidata": "tsx scripts/seed-wikidata.ts",
+    "seed:wikipedia": "tsx scripts/seed-wikipedia.ts",
+    "seed:summits": "tsx scripts/seed-summits.ts",
+    "seed:bilaterals": "tsx scripts/seed-bilaterals.ts",
+    "seed:2026": "tsx scripts/seed-2026.ts",
+    "seed:all": "npm run seed:countries && npm run seed:wikidata && npm run seed:summits && npm run seed:bilaterals",
+    "extract:news": "tsx scripts/extract-news.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.78.0",
+    "next": "15.5.20",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.20"
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "autoprefixer": "^10.5.2",
+    "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "15.5.20",
-    "@eslint/eslintrc": "^3"
+    "postcss": "^8.5.16",
+    "supabase": "^2.109.0",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.22.5",
+    "typescript": "^5"
   }
 }

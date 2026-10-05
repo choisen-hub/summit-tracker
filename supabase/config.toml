@@ -1,0 +1,13 @@
+# Minimal Supabase config. `supabase link --project-ref <ref>` connects this to
+# the hosted project; `supabase db push` applies migrations/*.sql to it.
+project_id = "summit-tracker"
+
+[db]
+major_version = 15
+
+[api]
+enabled = true
+schemas = ["public"]
+
+[studio]
+enabled = true
